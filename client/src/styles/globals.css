@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  color: #1c3c29;
+  background-color: #e5e4e6;
+}
+
+/* audio analysis */
+.static-image {
+  position: relative; 
+  width: 100%; 
+  height: 400px; 
+}
+
+.plot p {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.plot {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+}
+
+.transcription-info p {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.heading-container {
+  text-align: center;
+  position: absolute;
+  top: 230px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.btn-record {
+  display: block;
+  width: auto;
+  margin: 0 auto;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #de3e31;
+  color: #fff;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.loadingCursor {
+  cursor: wait;
+}
+
+.banner-img img {
+  width: 100%;
+  height: 400px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  margin-top: 20px; 
+}
+
+.plot img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px; 
+}
+
+.transcription-info {
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+}
+
+.side-img {
+  width: 40px; 
+  height: auto; 
+  margin-bottom: 0px; 
+}
+

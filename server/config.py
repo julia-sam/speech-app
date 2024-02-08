@@ -1,0 +1,2 @@
+SQLALCHEMY_DATABASE_URI = 'sqlite:///speech_analysis.db'
+SQLALCHEMY_TRACK_MODIFICATIONS = False

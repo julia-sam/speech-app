@@ -2,7 +2,7 @@ from pydub import AudioSegment
 import sounddevice as sd
 import numpy as np
 
-def record_audio(duration=5, audio_wav_path="audios/user_recordings/recording.wav"):
+def record_audio(duration=5, audio_wav_path="audio/recording.wav"):
     print("Recording audio...")
 
     # audio recording parameters

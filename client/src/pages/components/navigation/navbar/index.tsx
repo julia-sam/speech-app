@@ -19,7 +19,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link href="#">
+                <Link href="/linguistic_insights">
                   <p>Linguistic Insights</p>
                 </Link>
               </li>

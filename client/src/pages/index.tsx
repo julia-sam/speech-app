@@ -8,20 +8,35 @@ function AnalysisPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
 
+  const checkProcessingStatus = () => {
+    fetch('http://localhost:8080/api/processing_status')
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 'complete') {
+          // Processing is complete, set the results
+          setAnalysisResult(data.result_data);
+          setIsLoading(false);
+        } else {
+          // Processing is not yet complete, check again after a delay
+          setTimeout(checkProcessingStatus, 2000); // Check every 2 seconds
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        setIsLoading(false);
+      });
+  };
+
   const handleStartAnalysis = () => {
     setIsLoading(true);
     // Trigger the recording and analysis process
-    fetch('http://localhost:8080/record_and_plot', {
+    fetch('http://localhost:8080/api/record_and_plot', {
       method: 'POST',
     })
       .then((response) => response.json())
       .then(() => {
-        fetch('http://localhost:8080/api/audio_analysis')
-          .then((response) => response.json())
-          .then((data) => {
-            setAnalysisResult(data);
-            setIsLoading(false);
-          });
+        // Start checking the processing status
+        checkProcessingStatus();
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -42,14 +57,11 @@ function AnalysisPage() {
           </div>
         </div>
       <div>
-        {analysisResult.waveform_data && (
-          <Image src={`data:image/png;base64,${analysisResult.waveform_data}`} alt="Waveform" />
+      {analysisResult.waveform_data && (
+          <img src={`data:image/png;base64,${analysisResult.waveform_data}`} alt="Waveform" />
         )}
         {analysisResult.pitch_data && (
-          <Image src={`data:image/png;base64,${analysisResult.pitch_data}`} alt="Pitch" />
-        )}
-        {!analysisResult.waveform_data && !analysisResult.pitch_data && !isLoading && (
-          <p>No analysis data available. Click the button to start new analysis.</p>
+          <img src={`data:image/png;base64,${analysisResult.pitch_data}`} alt="Pitch" />
         )}
       </div>
     </div>

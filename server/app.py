@@ -1,6 +1,6 @@
 from flask_cors import CORS
 import base64
-from flask import Flask, current_app, jsonify
+from flask import Flask, current_app, jsonify, url_for
 import threading
 import os
 import logging
@@ -11,6 +11,8 @@ from record_audio import record_audio
 from plot_results import plot_results
 from werkzeug.utils import secure_filename
 from flask import current_app
+
+from exercise_service import fetch_exercises_for_category
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -91,6 +93,24 @@ def audio_processing_thread(app):
         }
         current_app.config['processing_done'] = True
         current_app.config['processing_started'] = False
+
+@app.route('/api/pronunciation_practice')
+def pronunciation_practice():
+    categories = ["The R Sound", "Short I Sound", "Long I Sound", "Phrase"] 
+    return jsonify(categories=categories)
+
+
+@app.route('/api/pronunciation_practice/<category_name>')
+def pronunciation_category_data(category_name):
+    domain = 'http://localhost:8080'
+    exercises = fetch_exercises_for_category(category_name)
+    exercises_data = [
+        {
+            'word_or_phrase': exercise['word_or_phrase'], 
+            'pronunciationUrl': domain + url_for('static', filename=exercise['audio_file_path'])
+        } for exercise in exercises
+    ]
+    return jsonify(exercises_data)
 
 
 if __name__ == "__main__":

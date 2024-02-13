@@ -9,18 +9,18 @@ const Navbar = () => {
           <div className="flex justify-between items-center h-full">
             <ul className="hidden md:flex gap-x-6 text-white">
               <li>
-                <Link href="/audio_analysis">
-                  <p>Audio Analysis</p>
+                <Link href="/">
+                  <p className="hover:text-gray-300 cursor-pointer">Audio Analysis</p>
                 </Link>
               </li>
               <li>
                 <Link href="/pronunciation_practice">
-                  <p>Practice and Compare</p>
+                  <p className="hover:text-gray-300 cursor-pointer">Practice and Compare</p>
                 </Link>
               </li>
               <li>
                 <Link href="/linguistic_insights">
-                  <p>Linguistic Insights</p>
+                  <p className="hover:text-gray-300 cursor-pointer">Linguistic Insights</p>
                 </Link>
               </li>
             </ul>

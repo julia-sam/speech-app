@@ -1,6 +1,6 @@
 from flask_cors import CORS
 import base64
-from flask import Flask, current_app, jsonify, url_for
+from flask import Flask, current_app, jsonify, send_from_directory, url_for
 import threading
 import os
 import logging
@@ -16,10 +16,19 @@ from exercise_service import fetch_exercises_for_category
 
 logging.basicConfig(level=logging.DEBUG)
 
-app = Flask(__name__, static_folder='../client/build', static_url_path='/')
+app = Flask(__name__, static_folder='static')
 app.config.from_object('config')
 db.init_app(app)  
 CORS(app)
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_react_app(path):
+    if path != "" and os.path.exists(app.static_folder + '/build/' + path):
+        return send_from_directory('../client/build', path)
+    else:
+        return send_from_directory('../client/build', 'index.html')
+    
 
 @app.route("/api/audio_analysis", methods=['GET'])
 def return_audio_analysis():

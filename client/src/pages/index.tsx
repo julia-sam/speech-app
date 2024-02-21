@@ -1,12 +1,12 @@
-import React, {useState} from "react";
-import Image from 'next/image';
+import React, {useState} from "react"
+import Image from 'next/image'
 
 function AnalysisPage() {
   const [analysisResult, setAnalysisResult] = useState({
     waveform_data: null,
     pitch_data: null,
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
   const checkProcessingStatus = () => {
     fetch('http://localhost:8080/api/processing_status')
@@ -14,21 +14,21 @@ function AnalysisPage() {
       .then((data) => {
         if (data.status === 'complete') {
           // Processing is complete, set the results
-          setAnalysisResult(data.result_data);
-          setIsLoading(false);
+          setAnalysisResult(data.result_data)
+          setIsLoading(false)
         } else {
           // Processing is not yet complete, check again after a delay
-          setTimeout(checkProcessingStatus, 2000); // Check every 2 seconds
+          setTimeout(checkProcessingStatus, 2000) // Check every 2 seconds
         }
       })
       .catch((error) => {
-        console.error('Error:', error);
-        setIsLoading(false);
+        console.error('Error:', error)
+        setIsLoading(false)
       });
   };
 
   const handleStartAnalysis = () => {
-    setIsLoading(true);
+    setIsLoading(true)
     // Trigger the recording and analysis process
     fetch('http://localhost:8080/api/record_and_plot', {
       method: 'POST',
@@ -36,10 +36,10 @@ function AnalysisPage() {
       .then((response) => response.json())
       .then(() => {
         // Start checking the processing status
-        checkProcessingStatus();
+        checkProcessingStatus()
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error('Error:', error)
         setIsLoading(false);
       });
   };
@@ -65,7 +65,7 @@ function AnalysisPage() {
         )}
       </div>
     </div>
-  );
+  )
 }
 
-export default AnalysisPage;
+export default AnalysisPage

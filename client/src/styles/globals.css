@@ -90,3 +90,27 @@ body {
   margin-bottom: 0px; 
 }
 
+.categories-container{
+  width: 80%; 
+  max-width: 700px; 
+  display:flex;
+  justify-content: center;
+  margin:auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); 
+  gap: 15px; 
+  padding: 0;
+}
+
+.category-item{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 70px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 0 15px;
+  position:relative;
+  border: 1px solid #9f9b9b;
+  flex: 1;
+}

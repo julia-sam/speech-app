@@ -5,8 +5,8 @@ import Navbar from "@/pages/components/navigation/navbar";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Navbar />;
-      <Component {...pageProps} />;
+      <Navbar />
+      <Component {...pageProps} />
     </>
   );
 }

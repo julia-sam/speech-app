@@ -1,6 +1,6 @@
 from flask_cors import CORS
 import base64
-from flask import Flask, current_app, jsonify, send_from_directory, url_for
+from flask import Flask, current_app, jsonify, send_from_directory, url_for, request, send_file, send_from_directory
 import threading
 import os
 import logging
@@ -11,8 +11,9 @@ from record_audio import record_audio
 from plot_results import plot_results
 from werkzeug.utils import secure_filename
 from flask import current_app
-
 from exercise_service import fetch_exercises_for_category
+from text_to_speech_service import generate_speech
+from io import BytesIO
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -42,7 +43,6 @@ def return_audio_analysis():
 
 @app.route('/api/record_and_plot', methods=['POST'])
 def start_record_and_plot():
-    # Ensure only one audio processing happens at a time
     if not current_app.config.get('processing_started', False):
         current_app.config['processing_started'] = True
         current_app.config['processing_done'] = False
@@ -62,34 +62,26 @@ def check_processing_status():
     
 def audio_processing_thread(app):
     with app.app_context():
-        # Get an instance of your application
         app_obj = current_app._get_current_object()
         
-        # Ensure the static/audio directory exists
         audio_dir = os.path.join(app_obj.root_path, 'static/audio')
         os.makedirs(audio_dir, exist_ok=True)
-        
-        # Define the full path for the audio file
+
         audio_wav_path = os.path.join(audio_dir, 'recording.wav')
 
-        # Record the audio
         recording = record_audio(audio_wav_path=audio_wav_path)
 
-        # Ensure the static/images directory exists
         images_dir = os.path.join(app_obj.root_path, 'static/images')
         os.makedirs(images_dir, exist_ok=True)
-        
-        # Define paths for the plots
+
         waveform_plot_filename = secure_filename('waveform_plot.png')
         pitch_plot_filename = secure_filename('pitch_plot.png')
         
         waveform_plot_path = os.path.join(images_dir, waveform_plot_filename)
         pitch_plot_path = os.path.join(images_dir, pitch_plot_filename)
 
-        # Call the plot_results function
         result_data = plot_results(recording, waveform_plot_path, pitch_plot_path)
 
-        # Store the result_data in the app context using context managers to open files
         with open(waveform_plot_path, 'rb') as waveform_file:
             waveform_data = base64.b64encode(waveform_file.read()).decode('utf-8')
 
@@ -121,6 +113,25 @@ def pronunciation_category_data(category_name):
     ]
     return jsonify(exercises_data)
 
+@app.route('/api/text-to-speech', methods=['POST'])
+def text_to_speech():
+    data = request.get_json()
+    text = data.get('text')
+
+    if not text:
+        return jsonify({'error': 'Text is required'}), 400
+
+    try:
+        file_path = generate_speech(text)
+
+        return jsonify({'message': 'Speech created', 'file_path': file_path})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/static/audio/<filename>')
+def serve_audio(filename):
+    return send_from_directory('static/audio', filename)
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)

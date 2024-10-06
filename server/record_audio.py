@@ -3,7 +3,7 @@ import sounddevice as sd
 import numpy as np
 import os
 
-def record_audio(duration=5, audio_wav_path="static/audio/recording.wav"):
+def record_audio(duration=2, audio_wav_path="static/audio/recording.wav"):
     os.makedirs(os.path.dirname(audio_wav_path), exist_ok=True)
     print("Recording audio...")
 

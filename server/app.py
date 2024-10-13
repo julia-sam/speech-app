@@ -67,47 +67,63 @@ def audio_processing_thread(app):
     with app.app_context():
         app_obj = current_app._get_current_object()
         
+        # Create directories for audio and images
         audio_dir = os.path.join(app_obj.root_path, 'static/audio')
         os.makedirs(audio_dir, exist_ok=True)
 
-        audio_wav_path = os.path.join(audio_dir, 'recording.wav')
+        # Generate a unique filename for the audio recording
+        audio_filename = f"user_recording_{uuid.uuid4()}.wav"
+        audio_wav_path = os.path.join(audio_dir, audio_filename)
 
+        # Record the user's audio and save it to the generated path
         recording = record_audio(audio_wav_path=audio_wav_path)
 
+        # Create directory for images
         images_dir = os.path.join(app_obj.root_path, 'static/images')
         os.makedirs(images_dir, exist_ok=True)
 
+        # File paths for waveform and pitch plots
         waveform_plot_filename = secure_filename('waveform_plot.png')
         pitch_plot_filename = secure_filename('pitch_plot.png')
-        
+
         waveform_plot_path = os.path.join(images_dir, waveform_plot_filename)
         pitch_plot_path = os.path.join(images_dir, pitch_plot_filename)
 
+        # Generate waveform and pitch plots
         result_data = plot_results(recording, waveform_plot_path, pitch_plot_path)
 
+        # Encode waveform and pitch images to base64
         with open(waveform_plot_path, 'rb') as waveform_file:
             waveform_data = base64.b64encode(waveform_file.read()).decode('utf-8')
 
         with open(pitch_plot_path, 'rb') as pitch_file:
             pitch_data = base64.b64encode(pitch_file.read()).decode('utf-8')
 
+        # Include the user's recorded audio path in the result data
         current_app.config['result_data'] = {
             'waveform_data': waveform_data,
-            'pitch_data': pitch_data
+            'pitch_data': pitch_data,
+            'user_audio': f'/static/audio/{audio_filename}'  # Path for the user's audio file
         }
+
+        # Mark the process as done
         current_app.config['processing_done'] = True
         current_app.config['processing_started'] = False
+
 
 @app.route('/api/text-to-speech', methods=['POST'])
 def text_to_speech():
     data = request.get_json()
     text = data.get('text')
+    api_key = data.get('api_key') 
 
     if not text:
         return jsonify({'error': 'Text is required'}), 400
+    if not api_key:
+        return jsonify({'error': 'API key is required'}), 400
 
     try:
-        result = generate_speech(text)
+        result = generate_speech(text, api_key) 
         logging.info(f"Result returned from generate_speech: {result}")
 
         return jsonify({
@@ -125,7 +141,7 @@ def text_to_speech():
 
 @app.route('/static/audio/<path:filename>')
 def serve_audio(filename):
-    return send_from_directory('static/audio', filename)
+    return send_from_directory('static/audio', filename, mimetype='audio/mpeg')
 
 @app.route('/api/save_session', methods=['POST'])
 def save_session_data():

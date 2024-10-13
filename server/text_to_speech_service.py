@@ -10,10 +10,9 @@ from dotenv import load_dotenv
 import logging
 import uuid
 
-load_dotenv()
-client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+def generate_speech(text, api_key):
+    client = OpenAI(api_key=api_key) 
 
-def generate_speech(text):
     static_audio_dir = Path(__file__).parent / 'static/audio'
     static_audio_dir.mkdir(parents=True, exist_ok=True)
 

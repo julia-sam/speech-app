@@ -2,6 +2,7 @@ from pydub import AudioSegment
 import sounddevice as sd
 import numpy as np
 import os
+import uuid
 
 def record_audio(duration=2, audio_wav_path="static/audio/recording.wav"):
     os.makedirs(os.path.dirname(audio_wav_path), exist_ok=True)

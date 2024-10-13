@@ -126,14 +126,27 @@ audio {
 }
 
 .container {
-  justify-content: center;
-  align-items: center;
-  max-width: 600px;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
+  max-width: 1200px;
   margin: auto;
+  padding: 20px;
 }
+
+.text-to-speech-section,
+.analysis-section {
+  margin-bottom: 40px; 
+}
+
+.chart-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.chart {
+  width: 48%; /* Ensures each chart takes half the width */
+  height: auto;
+}
+
 
 .navbar {
   background-color: #272833;  

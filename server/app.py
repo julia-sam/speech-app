@@ -77,7 +77,7 @@ def audio_processing_thread(app):
         audio_wav_path = os.path.join(audio_dir, audio_filename)
 
         # Record the user's audio and save it to the generated path
-        recording = record_audio(audio_wav_path=audio_wav_path)
+        recording, _ = record_audio(audio_wav_path=audio_wav_path)  # Only pass the audio segment, not the tuple
 
         # Create directory for images
         images_dir = os.path.join(app_obj.root_path, 'static/images')
@@ -91,7 +91,7 @@ def audio_processing_thread(app):
         pitch_plot_path = os.path.join(images_dir, pitch_plot_filename)
 
         # Generate waveform and pitch plots
-        result_data = plot_results(recording, waveform_plot_path, pitch_plot_path)
+        result_data = plot_results(recording, waveform_plot_path, pitch_plot_path)  # Pass only the audio segment
 
         # Encode waveform and pitch images to base64
         with open(waveform_plot_path, 'rb') as waveform_file:
@@ -110,7 +110,6 @@ def audio_processing_thread(app):
         # Mark the process as done
         current_app.config['processing_done'] = True
         current_app.config['processing_started'] = False
-
 
 @app.route('/api/text-to-speech', methods=['POST'])
 def text_to_speech():

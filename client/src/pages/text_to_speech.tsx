@@ -12,6 +12,7 @@ function TextToSpeechAndAnalysisPage() {
   const [analysisResult, setAnalysisResult] = useState({
     waveform_data: null,
     pitch_data: null,
+    user_audio: null,
     
   });
 
@@ -159,6 +160,7 @@ function TextToSpeechAndAnalysisPage() {
         setAnalysisResult({
           waveform_data: data.waveform_data,
           pitch_data: data.pitch_data,
+          user_audio: data.result_data.user_audio,
         });
       })
       .catch((error) => console.error("Error loading analysis session:", error));
@@ -229,6 +231,14 @@ function TextToSpeechAndAnalysisPage() {
         />
       )}
     </div>
+    {analysisResult.user_audio && (
+    <div className="audio-player">
+      <audio controls>
+        <source src={`http://localhost:8080${analysisResult.user_audio}`} type="audio/wav" />
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  )}
   </div>
   
 </div>

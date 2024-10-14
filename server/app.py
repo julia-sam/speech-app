@@ -15,6 +15,7 @@ from flask import current_app
 from exercise_service import fetch_exercises_for_category
 from text_to_speech_service import generate_speech, plot_results
 from io import BytesIO  
+import uuid
 
 
 logging.basicConfig(level=logging.DEBUG)

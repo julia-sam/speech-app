@@ -143,7 +143,7 @@ audio {
 }
 
 .chart {
-  width: 48%; 
+  width: 48%; /* Ensures each chart takes half the width */
   height: auto;
 }
 
@@ -161,7 +161,7 @@ audio {
 .navbar .container {
   background-color: transparent;  
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   height: 100%;
 }

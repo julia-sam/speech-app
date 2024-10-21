@@ -17,11 +17,11 @@ The waveform provides information on the loudness and length of sounds, while th
 
 Using this pitch analysis together with the waveform analysis, a user can have a set of visual aids to help with the learning and correction of pronunciation. 
 
-![Audio analysis](https://github.com/yulia-samoilovich/speech-project/blob/main/audio_analysis.png?raw=true)
+![Audio analysis](https://github.com/yulia-samoilovich/speech-app/blob/main/app.png?raw=true)
 
 ### Framework and libraries
 - **Frameworks**: Flask, React
 - **Database**: SQLite
-- **Libraries**: speech recognition, numpy, parselmouth, pydub (AudioSegment), sound device 
+- **Libraries**: speech recognition, numpy, parselmouth, pydub (AudioSegment), sound device, OpenAI API
 
  
